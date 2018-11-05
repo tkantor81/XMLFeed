@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XMLFeed", "XMLFeed\XMLFeed.csproj", "{05690550-9141-4F3F-BDAA-139D533412E1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{05690550-9141-4F3F-BDAA-139D533412E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{05690550-9141-4F3F-BDAA-139D533412E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{05690550-9141-4F3F-BDAA-139D533412E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{05690550-9141-4F3F-BDAA-139D533412E1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {95BB4412-D5B8-4D09-859F-F7C50F17F5FF}
+	EndGlobalSection
+EndGlobal
