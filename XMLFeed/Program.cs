@@ -8,17 +8,31 @@ namespace XMLFeed
         static void Main(string[] args)
         {
             Options opts = new Options();
-            Parser.Default.ParseArgumentsStrict(args, opts, () => Console.WriteLine("Example arguments: --supplier=TIPTRADE --input=\"https://www.levne-povleceni.cz/tiptrade_products.xml\" --output=output.xml"));
+            Parser.Default.ParseArgumentsStrict(args, opts, () => 
+            {
+                Console.WriteLine("Example arguments: --supplier=TIPTRADE --input=\"https://www.levne-povleceni.cz/tiptrade_products.xml\" --output=output.xml");
+                Environment.Exit(1);
+            });
 
+            Supplier supp = null;
             switch (opts.Supplier)
             {
                 case "TIPTRADE":
-                    var supp = new Tiptrade(opts);
-                    //TODO
+                    supp = new Tiptrade(opts);
+                    break;
+                case "MATYSKA":
+                    supp = new Matyska(opts);
                     break;
                 default:
-                    Console.WriteLine("Unknown supplier");
+                    Console.WriteLine("Unsupported supplier");
+                    Environment.Exit(1);
                     break;
+            }
+            if (supp != null)
+            {
+                supp.Load();
+                supp.Transform();
+                supp.Save();
             }
         }
     }
