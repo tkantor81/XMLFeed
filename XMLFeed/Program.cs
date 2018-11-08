@@ -33,6 +33,7 @@ namespace XMLFeed
                 supp.Load();
                 supp.Transform();
                 supp.Save();
+                Console.WriteLine("Done");
             }
         }
     }
