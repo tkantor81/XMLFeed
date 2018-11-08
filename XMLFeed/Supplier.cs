@@ -24,8 +24,7 @@ namespace XMLFeed
         }
 
         public void Save()
-        {
-            
+        {  
             doc.Save(Output);
         }
 

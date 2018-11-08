@@ -7,7 +7,7 @@ namespace XMLFeed
 {
     public class Options
     {
-        [Option("supplier", Required = true, HelpText = "Supplier - TIPTRADE | MATYSKA")]
+        [Option("supplier", Required = true, HelpText = "Supplier - TIPTRADE | MATYSKA | MATYSKA_STOCK")]
         public string Supplier { get; set; }
         
         [Option("input", Required = true, HelpText = "Input XML Feed file")]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace XMLFeed
+namespace XMLFeed.Suppliers
 {
     public class Matyska : Supplier
     {
@@ -77,7 +77,7 @@ namespace XMLFeed
                     ----------------------------------
                     empty     Vyprodáno     Vyprodáno
                     0         Skladem       2 - 4 dny
-                    else      ?             Neznámá
+                    else      ?             Na dotaz
                 */
                 if (Int32.TryParse(deliveryDate.InnerXml, out int delivery))
                 {
@@ -87,7 +87,7 @@ namespace XMLFeed
                             availability.InnerXml = "2 - 4 dny";
                             break;
                         default:
-                            availability.InnerXml = "Neznámá";
+                            availability.InnerXml = "Na dotaz";
                             break;
                     }
                 }

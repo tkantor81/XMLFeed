@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Xml;
 
-namespace XMLFeed
+namespace XMLFeed.Suppliers
 {
     public class Tiptrade : Supplier
     {
@@ -68,7 +68,7 @@ namespace XMLFeed
                     4         3 - 5 dnů                 6 - 8 dnů
                     5         Na cestě                  Na cestě
                     30        Momentálně nedostupné     Momentálně nedostupné 
-                    else      ?                         Neznámá
+                    else      ?                         Na dotaz
                 */
                 if (Int32.TryParse(deliveryDate.InnerXml, out int delivery))
                 {
@@ -96,7 +96,7 @@ namespace XMLFeed
                             availability.InnerXml = "Momentálně nedostupné";
                             break;
                         default:
-                            availability.InnerXml = "Neznámá";
+                            availability.InnerXml = "Na dotaz";
                             break;
                     }
                 }

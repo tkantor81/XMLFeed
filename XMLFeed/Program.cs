@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using System;
+using XMLFeed.Suppliers;
 
 namespace XMLFeed
 {
@@ -22,6 +23,9 @@ namespace XMLFeed
                     break;
                 case "MATYSKA":
                     supp = new Matyska(opts);
+                    break;
+                case "MATYSKA_STOCK":
+                    supp = new MatyskaStock(opts);
                     break;
                 default:
                     Console.WriteLine("Unsupported supplier");
