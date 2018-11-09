@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Xml;
 
@@ -76,7 +77,7 @@ namespace XMLFeed.Suppliers
                     XML	      Their web     Mine web
                     ----------------------------------
                     empty     Vyprodáno     Vyprodáno
-                    0         Skladem       2 - 4 dny
+                    0         Skladem       1 - 3 dny
                     else      ?             Na dotaz
                 */
                 if (Int32.TryParse(deliveryDate.InnerXml, out int delivery))
@@ -84,7 +85,7 @@ namespace XMLFeed.Suppliers
                     switch (delivery)
                     {
                         case 0:
-                            availability.InnerXml = "2 - 4 dny";
+                            availability.InnerXml = "1 - 3 dny";
                             break;
                         default:
                             availability.InnerXml = "Na dotaz";
@@ -96,6 +97,45 @@ namespace XMLFeed.Suppliers
                     availability.InnerXml = "Vyprodáno";
                 }
                 item.ReplaceChild(availability, deliveryDate);
+
+                // rename LISTPRICE_VAT to STANDARD_PRICE
+                XmlNode listpriceVat = item.SelectSingleNode("LISTPRICE_VAT");
+                XmlElement stdPrice = doc.CreateElement("STANDARD_PRICE");
+                if (Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price))
+                {
+                    stdPrice.InnerXml = Math.Round(price, 0, MidpointRounding.AwayFromZero).ToString();
+                }
+                else
+                {
+                    stdPrice.InnerXml = listpriceVat.InnerXml;
+                }
+                item.ReplaceChild(stdPrice, listpriceVat);
+
+                // rename YOURPRICE_VAT to PURCHASE_PRICE
+                XmlNode yourpriceVat = item.SelectSingleNode("YOURPRICE_VAT");
+                XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
+                if (Double.TryParse(yourpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price2))
+                {
+                    purchasePrice.InnerXml = Math.Round(price2, 0, MidpointRounding.AwayFromZero).ToString();
+                }
+                else
+                {
+                    purchasePrice.InnerXml = yourpriceVat.InnerXml;
+                }
+                item.ReplaceChild(purchasePrice, yourpriceVat);
+
+                // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 10%
+                XmlNode yourprice = item.SelectSingleNode("YOURPRICE");
+                XmlElement priceVat = doc.CreateElement("PRICE_VAT");
+                if (Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
+                {
+                    priceVat.InnerXml = Math.Round(price3 * 0.9, 0, MidpointRounding.AwayFromZero).ToString();
+                }
+                else
+                {
+                    priceVat.InnerXml = listpriceVat.InnerXml;
+                }
+                item.ReplaceChild(priceVat, yourprice);
             }
         }
     }
