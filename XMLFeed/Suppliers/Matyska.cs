@@ -17,10 +17,10 @@ namespace XMLFeed.Suppliers
             XmlNodeList items = doc.SelectNodes("/SHOP/SHOPITEM");
             foreach (XmlNode item in items)
             {
-                // rename ITEM_ID to CODE
+                // rename ITEM_ID to CODE, add Prefix
                 XmlNode itemId = item.SelectSingleNode("ITEM_ID");
                 XmlElement code = doc.CreateElement("CODE");
-                code.InnerXml = itemId.InnerXml;
+                code.InnerXml = Prefix + itemId.InnerXml;
                 item.ReplaceChild(code, itemId);
 
                 // rename PRODUCT to NAME
@@ -124,18 +124,32 @@ namespace XMLFeed.Suppliers
                 }
                 item.ReplaceChild(purchasePrice, yourpriceVat);
 
-                // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 10%
+                // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 5%
                 XmlNode yourprice = item.SelectSingleNode("YOURPRICE");
                 XmlElement priceVat = doc.CreateElement("PRICE_VAT");
                 if (Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
                 {
-                    priceVat.InnerXml = Math.Round(price3 * 0.9, 0, MidpointRounding.AwayFromZero).ToString();
+                    priceVat.InnerXml = Math.Round(price3 * 0.95, 0, MidpointRounding.AwayFromZero).ToString();
                 }
                 else
                 {
                     priceVat.InnerXml = listpriceVat.InnerXml;
                 }
                 item.ReplaceChild(priceVat, yourprice);
+            }
+        }
+
+        public override void Extend()
+        {
+            XmlNodeList items = ext.SelectNodes("/ITEMLIST/ITEM");
+            foreach (XmlNode item in items)
+            {
+                XmlNode shopitem = doc.SelectSingleNode($"/SHOP/SHOPITEM[CODE='{Prefix + item.FirstChild.InnerXml}']");
+                XmlElement stock = doc.CreateElement("STOCK");
+                XmlElement amount = doc.CreateElement("AMOUNT");
+                amount.InnerText = item.LastChild.InnerXml;
+                stock.AppendChild(amount);
+                shopitem.AppendChild(stock);
             }
         }
     }

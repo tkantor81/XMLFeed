@@ -15,7 +15,7 @@ namespace XMLFeed.Suppliers
         {
             var transDoc = new XmlDocument();
             
-            // transform ITEMLIST/ITEMs to SHOP/SHOPITEMs
+            // transform ITEMLIST/ITEMs to SHOP/SHOPITEMs, add Prefix to CODE
             XmlElement shop = transDoc.CreateElement("SHOP");
            
             XmlNodeList items = doc.SelectNodes("/ITEMLIST/ITEM");
@@ -23,7 +23,7 @@ namespace XMLFeed.Suppliers
             {
                 XmlElement shopitem = transDoc.CreateElement("SHOPITEM");
                 XmlElement code = transDoc.CreateElement("CODE");
-                code.InnerText = item.FirstChild.InnerXml;
+                code.InnerText = Prefix + item.FirstChild.InnerXml;
                 shopitem.AppendChild(code);
                 XmlElement stock = transDoc.CreateElement("STOCK");
                 XmlElement amount = transDoc.CreateElement("AMOUNT");

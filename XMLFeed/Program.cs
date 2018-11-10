@@ -11,7 +11,7 @@ namespace XMLFeed
             Options opts = new Options();
             Parser.Default.ParseArgumentsStrict(args, opts, () => 
             {
-                Console.WriteLine("Example arguments: --supplier=TIPTRADE --input=\"https://www.levne-povleceni.cz/tiptrade_products.xml\" --output=output.xml");
+                Console.WriteLine("Example arguments: --supplier=MATYSKA --input=\"https://www.puzzle-puzzle.cz/xml/voc-feed.xml?u=meta-shop&p=wa45bp\" --extension=\"https://www.puzzle-puzzle.cz/xml/voc-dostupnost.xml?u=meta-shop&p=wa45bp\" --prefix=PUZ --output=output.xml");
                 Environment.Exit(1);
             });
 
@@ -36,6 +36,7 @@ namespace XMLFeed
             {
                 supp.Load();
                 supp.Transform();
+                supp.Extend();
                 supp.Save();
                 Console.WriteLine("Done");
             }
