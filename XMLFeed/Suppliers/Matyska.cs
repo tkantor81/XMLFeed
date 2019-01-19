@@ -124,16 +124,23 @@ namespace XMLFeed.Suppliers
                 }
                 item.ReplaceChild(purchasePrice, yourpriceVat);
 
+                // get MANUFACTURER
+                XmlNode manufacturer = item.SelectSingleNode("MANUFACTURER");
+
                 // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 5%
                 XmlNode yourprice = item.SelectSingleNode("YOURPRICE");
                 XmlElement priceVat = doc.CreateElement("PRICE_VAT");
-                if (Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
+                if (manufacturer?.InnerXml != "ARS UNA"
+                    && Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
                 {
+                    // discount
                     priceVat.InnerXml = Math.Round(price3 * 0.95, 0, MidpointRounding.AwayFromZero).ToString();
                 }
                 else
                 {
-                    priceVat.InnerXml = listpriceVat.InnerXml;
+                    // no discount
+                    int decIndex = listpriceVat.InnerXml.IndexOf('.');
+                    priceVat.InnerXml = listpriceVat.InnerXml.Substring(0, decIndex == -1 ? listpriceVat.InnerXml.Length : decIndex);
                 }
                 item.ReplaceChild(priceVat, yourprice);
             }
@@ -145,11 +152,14 @@ namespace XMLFeed.Suppliers
             foreach (XmlNode item in items)
             {
                 XmlNode shopitem = doc.SelectSingleNode($"/SHOP/SHOPITEM[CODE='{Prefix + item.FirstChild.InnerXml}']");
-                XmlElement stock = doc.CreateElement("STOCK");
-                XmlElement amount = doc.CreateElement("AMOUNT");
-                amount.InnerText = item.LastChild.InnerXml;
-                stock.AppendChild(amount);
-                shopitem.AppendChild(stock);
+                if (shopitem != null)
+                {
+                    XmlElement stock = doc.CreateElement("STOCK");
+                    XmlElement amount = doc.CreateElement("AMOUNT");
+                    amount.InnerText = item.LastChild.InnerXml;
+                    stock.AppendChild(amount);
+                    shopitem.AppendChild(stock);
+                }
             }
         }
     }
