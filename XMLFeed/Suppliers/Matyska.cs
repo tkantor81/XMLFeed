@@ -17,6 +17,23 @@ namespace XMLFeed.Suppliers
             XmlNodeList items = doc.SelectNodes("/SHOP/SHOPITEM");
             foreach (XmlNode item in items)
             {
+                // remove all items from category "Lepidla, rámy a příslušenství"
+                bool removeItem = false;
+                XmlNodeList categorytexts = item.SelectNodes("CATEGORYTEXT");
+                foreach (XmlNode categorytext in categorytexts)
+                { 
+                    if (categorytext.InnerXml.Contains("Lepidla, rámy a příslušenství"))
+                    {
+                        removeItem = true;
+                        break;
+                    }
+                }
+                if (removeItem)
+                {
+                    item.ParentNode.RemoveChild(item);
+                    continue;
+                }
+
                 // rename ITEM_ID to CODE, add Prefix
                 XmlNode itemId = item.SelectSingleNode("ITEM_ID");
                 XmlElement code = doc.CreateElement("CODE");
@@ -59,7 +76,6 @@ namespace XMLFeed.Suppliers
                 item.AppendChild(images);
 
                 // transform CATEGORYTEXTs to CATEGORIES/CATEGORY
-                XmlNodeList categorytexts = item.SelectNodes("CATEGORYTEXT");
                 XmlElement cetegories = doc.CreateElement("CATEGORIES");
                 foreach (XmlNode categorytext in categorytexts)
                 {
