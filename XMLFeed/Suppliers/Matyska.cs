@@ -146,7 +146,7 @@ namespace XMLFeed.Suppliers
                 // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 5%
                 XmlNode yourprice = item.SelectSingleNode("YOURPRICE");
                 XmlElement priceVat = doc.CreateElement("PRICE_VAT");
-                if (manufacturer?.InnerXml != "ARS UNA"
+                if (manufacturer?.InnerXml != "ARS UNA" && manufacturer?.InnerXml != "WALKER"
                     && Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
                 {
                     // discount
