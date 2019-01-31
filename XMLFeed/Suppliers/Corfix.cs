@@ -164,6 +164,13 @@ namespace XMLFeed.Suppliers
                 {
                     item.RemoveChild(attachments);
                 }
+
+                // fill EAN if empty
+                XmlNode ean = item.SelectSingleNode("EAN");
+                if (ean.InnerXml == "")
+                {
+                    ean.InnerXml = "0";
+                }
             }
         }
     }
