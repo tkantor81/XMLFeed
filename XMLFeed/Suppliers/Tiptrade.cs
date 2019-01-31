@@ -48,7 +48,7 @@ namespace XMLFeed.Suppliers
                 foreach (XmlNode categorytext in categorytexts)
                 {
                     XmlElement category = doc.CreateElement("CATEGORY");
-                    category.InnerXml = categorytext.InnerXml.Replace('|', '>');;
+                    category.InnerXml = categorytext.InnerXml.Replace('|', '>');
                     cetegories.AppendChild(category);
                     categorytext.ParentNode.RemoveChild(categorytext);
                 }

@@ -27,6 +27,9 @@ namespace XMLFeed
                 case "MATYSKA_STOCK":
                     supp = new MatyskaStock(opts);
                     break;
+                case "CORFIX":
+                    supp = new Corfix(opts);
+                    break;
                 default:
                     Console.WriteLine("Unsupported supplier");
                     Environment.Exit(1);

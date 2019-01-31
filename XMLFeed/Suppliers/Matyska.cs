@@ -80,7 +80,7 @@ namespace XMLFeed.Suppliers
                 foreach (XmlNode categorytext in categorytexts)
                 {
                     XmlElement category = doc.CreateElement("CATEGORY");
-                    category.InnerXml = categorytext.InnerXml.Replace(@"&amp;gt;", ">");;
+                    category.InnerXml = categorytext.InnerXml.Replace(@"&amp;gt;", ">");
                     cetegories.AppendChild(category);
                     categorytext.ParentNode.RemoveChild(categorytext);
                 }
