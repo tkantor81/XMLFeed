@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Net;
+using System.Text;
+
+namespace XMLFeed
+{
+    public class Utils
+    {
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = Encoding.GetEncoding("ISO-8859-1").GetBytes(plainText);
+            return Convert.ToBase64String(plainTextBytes);
+        }
+
+        public static string HttpGet(string uri, string credentials)
+        {
+            //var client = new WebClient {Credentials = new NetworkCredential("livestreet", "AMT2018live")};
+            //return client.DownloadString("http://obchod.corfix.cz/Stazeni-katalogu-zbozi-XML2.aspx");
+
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            request.PreAuthenticate = true;
+            string auth = Base64Encode(credentials);
+            request.Headers.Add("Authorization", "Basic " + auth);
+            //request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+
+            using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+            using (Stream stream = response.GetResponseStream())
+            using (StreamReader reader = new StreamReader(stream))
+            {
+                return reader.ReadToEnd();
+            }
+        }
+    }
+}

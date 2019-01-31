@@ -59,7 +59,10 @@ namespace XMLFeed.Suppliers
 
                 // remove URL
                 XmlNode url = item.SelectSingleNode("URL");
-                item.RemoveChild(url);
+                if (url != null)
+                {
+                    item.RemoveChild(url);
+                }
 
                 // transform IMGURLs to IMAGES/IMAGE
                 XmlNodeList imgurls = item.SelectNodes("IMGURL");
@@ -93,6 +96,74 @@ namespace XMLFeed.Suppliers
                 stock.AppendChild(amount);
                 item.AppendChild(stock);
                 item.RemoveChild(stockLevel);
+
+                // rename PRICE to PURCHASE_PRICE
+                XmlNode price = item.SelectSingleNode("PRICE");
+                XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
+                if (Double.TryParse(price.InnerXml, NumberStyles.Any, new CultureInfo("cs-CZ"), out double parsedPrice))
+                {
+                    purchasePrice.InnerXml = Math.Round(parsedPrice, 0, MidpointRounding.AwayFromZero).ToString();
+                }
+                else
+                {
+                    purchasePrice.InnerXml = price.InnerXml;
+                }
+                item.ReplaceChild(purchasePrice, price);
+
+                // rename BASICPRICE_VAT to PRICE
+                XmlNode basicPriceVAT = item.SelectSingleNode("BASICPRICE_VAT");
+                price = doc.CreateElement("PRICE");
+                if (Double.TryParse(basicPriceVAT.InnerXml, NumberStyles.Any, new CultureInfo("cs-CZ"), out double parsedPrice2))
+                {
+                    price.InnerXml = Math.Round(parsedPrice2, 0, MidpointRounding.AwayFromZero).ToString();
+                }
+                else
+                {
+                    price.InnerXml = basicPriceVAT.InnerXml;
+                }
+                item.ReplaceChild(price, basicPriceVAT);
+
+                // remove BASICPRICE
+                XmlNode basicPrice = item.SelectSingleNode("BASICPRICE");
+                if (basicPrice != null)
+                {
+                    item.RemoveChild(basicPrice);
+                }
+
+                // remove PRICE_VAT
+                XmlNode priceVAT = item.SelectSingleNode("PRICE_VAT");
+                if (priceVAT != null)
+                {
+                    item.RemoveChild(priceVAT);
+                }
+
+                // remove WIDTH
+                XmlNode width = item.SelectSingleNode("WIDTH");
+                if (width != null)
+                {
+                    item.RemoveChild(width);
+                }
+
+                // remove HEIGHT
+                XmlNode height = item.SelectSingleNode("HEIGHT");
+                if (height != null)
+                {
+                    item.RemoveChild(height);
+                }
+
+                // remove DEPTH
+                XmlNode depth = item.SelectSingleNode("DEPTH");
+                if (depth != null)
+                {
+                    item.RemoveChild(depth);
+                }
+
+                // remove ATTACHMENTS
+                XmlNode attachments = item.SelectSingleNode("ATTACHMENTS");
+                if (attachments != null)
+                {
+                    item.RemoveChild(attachments);
+                }
             }
         }
     }

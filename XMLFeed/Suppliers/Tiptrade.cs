@@ -28,7 +28,10 @@ namespace XMLFeed.Suppliers
 
                 // remove URL
                 XmlNode url = item.SelectSingleNode("URL");
-                item.RemoveChild(url);
+                if (url != null)
+                {
+                    item.RemoveChild(url);
+                }
 
                 // transform IMGURLs to IMAGES/IMAGE
                 XmlNodeList imgurls = item.SelectNodes("IMGURL");
@@ -56,7 +59,10 @@ namespace XMLFeed.Suppliers
 
                 // remove PRODUCTNO
                 XmlNode productno = item.SelectSingleNode("PRODUCTNO");
-                item.RemoveChild(productno);
+                if (productno != null)
+                {
+                    item.RemoveChild(productno);
+                }
 
                 // transform DELIVERY_DATE to AVAILABILITY
                 XmlNode deliveryDate = item.SelectSingleNode("DELIVERY_DATE");
