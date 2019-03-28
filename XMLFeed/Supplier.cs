@@ -27,11 +27,11 @@ namespace XMLFeed
 
         public void Load()
         {
-            //if (Name == "CORFIX")
-            //{
-            //     doc.LoadXml(Utils.HttpGet(Input, "livestreet:AMT2018live"));
-            //}
-            //else
+            if (Name == "CORFIX")
+            {
+                doc.LoadXml(Utils.HttpGet(Input, "livestreet:AMT2018live"));
+            }
+            else
             {
                 doc.Load(Input);
             }

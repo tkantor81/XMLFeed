@@ -146,13 +146,13 @@ namespace XMLFeed.Suppliers
                 // transform YOURPRICE to PRICE_VAT as LISTPRICE_VAT - 5%
                 XmlNode yourprice = item.SelectSingleNode("YOURPRICE");
                 XmlElement priceVat = doc.CreateElement("PRICE_VAT");
-                if (manufacturer?.InnerXml != "ARS UNA" && manufacturer?.InnerXml != "WALKER"
-                    && Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
-                {
-                    // discount
-                    priceVat.InnerXml = Math.Round(price3 * 0.95, 0, MidpointRounding.AwayFromZero).ToString();
-                }
-                else
+                //if (manufacturer?.InnerXml != "ARS UNA" && manufacturer?.InnerXml != "WALKER"
+                //    && Double.TryParse(listpriceVat.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double price3))
+                //{
+                //    // discount
+                //    priceVat.InnerXml = Math.Round(price3 * 0.95, 0, MidpointRounding.AwayFromZero).ToString();
+                //}
+                //else
                 {
                     // no discount
                     int decIndex = listpriceVat.InnerXml.IndexOf('.');
