@@ -1,3 +1,3 @@
 ﻿--supplier=MATYSKA --input="https://www.puzzle-puzzle.cz/xml/voc-feed.xml?u=meta-shop&p=wa45bp" --extension="https://www.puzzle-puzzle.cz/xml/voc-dostupnost.xml?u=meta-shop&p=wa45bp" --prefix=PUZ --output=output.xml
 --supplier=MATYSKA --input="https://www.stavebnice-hry.cz/xml/voc-feed.xml?u=meta-shop&p=wa45bp" --extension="https://www.stavebnice-hry.cz/xml/voc-dostupnost.xml?u=meta-shop&p=wa45bp" --prefix=STH --output=output.xml
---supplier=CORFIX --input="C:\Users\h264399\Desktop\Jiří Lejska\XML Feed\4\Corfix_catalog.xml" --prefix=COR --output=output.xml
+--supplier=CORFIX --input="https://obchod.corfix.cz/Stazeni-katalogu-zbozi-XML2.aspx" --prefix=COR --output=output.xml

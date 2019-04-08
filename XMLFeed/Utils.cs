@@ -16,14 +16,11 @@ namespace XMLFeed
 
         public static string HttpGet(string uri, string credentials)
         {
-            //var client = new WebClient {Credentials = new NetworkCredential("livestreet", "AMT2018live")};
-            //return client.DownloadString("http://obchod.corfix.cz/Stazeni-katalogu-zbozi-XML2.aspx");
-
             HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
             request.PreAuthenticate = true;
             string auth = Base64Encode(credentials);
             request.Headers.Add("Authorization", "Basic " + auth);
-            //request.AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate;
+            request.Timeout = 300000;
 
             using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
             using (Stream stream = response.GetResponseStream())
