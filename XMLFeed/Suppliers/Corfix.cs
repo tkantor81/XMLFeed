@@ -32,6 +32,10 @@ namespace XMLFeed.Suppliers
                     continue;
                 }
 
+                // add Prefix to CODE
+                XmlNode code = item.SelectSingleNode("CODE");
+                code.InnerXml = Prefix + code.InnerXml;
+
                 // rename PRODUCT to NAME
                 XmlNode product = item.SelectSingleNode("PRODUCT");
                 XmlElement name = doc.CreateElement("NAME");
