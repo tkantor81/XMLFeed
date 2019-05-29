@@ -101,31 +101,31 @@ namespace XMLFeed.Suppliers
                 item.AppendChild(stock);
                 item.RemoveChild(stockLevel);
 
-                // rename PRICE to PURCHASE_PRICE
-                XmlNode price = item.SelectSingleNode("PRICE");
+                // rename PRICE_VAT to PURCHASE_PRICE
+                XmlNode priceVat = item.SelectSingleNode("PRICE_VAT");
                 XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
-                if (Double.TryParse(price.InnerXml, NumberStyles.Any, new CultureInfo("cs-CZ"), out double parsedPrice))
+                if (Double.TryParse(priceVat.InnerXml, NumberStyles.Any, new CultureInfo("cs-CZ"), out double parsedPrice))
                 {
                     purchasePrice.InnerXml = Math.Round(parsedPrice, 0, MidpointRounding.AwayFromZero).ToString();
                 }
                 else
                 {
-                    purchasePrice.InnerXml = price.InnerXml;
+                    purchasePrice.InnerXml = priceVat.InnerXml;
                 }
-                item.ReplaceChild(purchasePrice, price);
+                item.ReplaceChild(purchasePrice, priceVat);
 
-                // rename BASICPRICE_VAT to PRICE
+                // rename BASICPRICE_VAT to PRICE_VAT
                 XmlNode basicPriceVAT = item.SelectSingleNode("BASICPRICE_VAT");
-                price = doc.CreateElement("PRICE");
+                priceVat = doc.CreateElement("PRICE_VAT");
                 if (Double.TryParse(basicPriceVAT.InnerXml, NumberStyles.Any, new CultureInfo("cs-CZ"), out double parsedPrice2))
                 {
-                    price.InnerXml = Math.Round(parsedPrice2, 0, MidpointRounding.AwayFromZero).ToString();
+                    priceVat.InnerXml = Math.Round(parsedPrice2, 0, MidpointRounding.AwayFromZero).ToString();
                 }
                 else
                 {
-                    price.InnerXml = basicPriceVAT.InnerXml;
+                    priceVat.InnerXml = basicPriceVAT.InnerXml;
                 }
-                item.ReplaceChild(price, basicPriceVAT);
+                item.ReplaceChild(priceVat, basicPriceVAT);
 
                 // remove BASICPRICE
                 XmlNode basicPrice = item.SelectSingleNode("BASICPRICE");
@@ -134,11 +134,11 @@ namespace XMLFeed.Suppliers
                     item.RemoveChild(basicPrice);
                 }
 
-                // remove PRICE_VAT
-                XmlNode priceVAT = item.SelectSingleNode("PRICE_VAT");
-                if (priceVAT != null)
+                // remove PRICE
+                XmlNode price = item.SelectSingleNode("PRICE");
+                if (price != null)
                 {
-                    item.RemoveChild(priceVAT);
+                    item.RemoveChild(price);
                 }
 
                 // remove WIDTH
