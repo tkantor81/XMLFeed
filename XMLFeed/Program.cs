@@ -30,6 +30,9 @@ namespace XMLFeed
                 case "CORFIX":
                     supp = new Corfix(opts);
                     break;
+                case "OXYBAG":
+                    supp = new Oxybag(opts);
+                    break;
                 default:
                     Console.WriteLine("Unsupported supplier");
                     Environment.Exit(1);

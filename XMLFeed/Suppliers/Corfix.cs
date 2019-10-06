@@ -55,7 +55,7 @@ namespace XMLFeed.Suppliers
                 {
                     XmlElement category = doc.CreateElement("CATEGORY");
                     string cattxt = categorytext.InnerXml;
-                    category.InnerXml = cattxt.Substring(0, cattxt.IndexOf('\n') > 0 ? cattxt.IndexOf('\n') - 1 : cattxt.Length).Replace('|', '>');;
+                    category.InnerXml = cattxt.Substring(0, cattxt.IndexOf('\n') > 0 ? cattxt.IndexOf('\n') - 1 : cattxt.Length).Replace('|', '>');
                     cetegories.AppendChild(category);
                     categorytext.ParentNode.RemoveChild(categorytext);
                 }
