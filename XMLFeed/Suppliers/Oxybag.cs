@@ -71,12 +71,64 @@ namespace XMLFeed.Suppliers
                     categorytext.ParentNode.RemoveChild(categorytext);
                 }
                 item.AppendChild(cetegories);
-
-                // remove node <PRICE>?</PRICE>
+                
                 XmlNode price = item.SelectSingleNode("PRICE");
                 if (price != null && price.InnerText == "?")
                 {
+                    // remove node <PRICE>?</PRICE>
                     item.RemoveChild(price);
+                }
+                else
+                {
+                    // rename PRICE to PURCHASE_PRICE
+                    XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
+                    purchasePrice.InnerXml = price.InnerXml;
+                    item.ReplaceChild(purchasePrice, price);
+                }
+
+                // rename PRICE_VAT to VAT
+                XmlNode priceVat = item.SelectSingleNode("PRICE_VAT");
+                if (priceVat != null)
+                {
+                    XmlElement vat = doc.CreateElement("VAT");
+                    vat.InnerXml = priceVat.InnerXml;
+                    item.ReplaceChild(vat, priceVat);
+                }
+
+                // rename DMOC_VC_DPH to PRICE_VAT
+                XmlNode dmocVcDPH = item.SelectSingleNode("DMOC_VC_DPH");
+                if (dmocVcDPH != null)
+                {
+                    priceVat = doc.CreateElement("PRICE_VAT");
+                    priceVat.InnerXml = dmocVcDPH.InnerXml;
+                    item.ReplaceChild(priceVat, dmocVcDPH);
+                }
+
+                // transform PARAMs to TEXT_PROPERTIES/TEXT_PROPERTY
+                XmlNode paramss = item.SelectSingleNode("PARAMS");
+                if (paramss != null)
+                {
+                    XmlElement textProperties = doc.CreateElement("TEXT_PROPERTIES");
+                    foreach (XmlNode param in paramss.ChildNodes)
+                    {
+                        XmlElement textProperty = doc.CreateElement("TEXT_PROPERTY");
+                        XmlElement propName = doc.CreateElement("NAME");
+                        propName.InnerText = param.FirstChild.InnerXml;
+                        textProperty.AppendChild(propName);
+                        XmlElement propValue = doc.CreateElement("VALUE");
+                        propValue.InnerText = param.LastChild.InnerXml;
+                        textProperty.AppendChild(propValue);
+                        textProperties.AppendChild(textProperty);
+                    }
+                    item.AppendChild(textProperties);
+                    item.RemoveChild(paramss);
+                }
+
+                // fill EAN if empty
+                XmlNode ean = item.SelectSingleNode("EAN");
+                if (ean.InnerXml == "")
+                {
+                    ean.InnerXml = "0";
                 }
             }
         }

@@ -33,7 +33,6 @@ namespace XMLFeed
             }
             else
             {
-                //doc.Load("C:\\Users\\h264399\\Desktop\\Jirka\\7199158b5c825d11c2649c2aeb8843db86c3007e.xml");
                 doc.Load(Input);
             }
 
