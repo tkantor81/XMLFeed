@@ -14,6 +14,7 @@ namespace XMLFeed
         private readonly string Input;
         private readonly string Extension;
         protected readonly string Prefix;
+        protected readonly int MinPrice;
         private readonly string Output;
 
         public Supplier(Options opts)
@@ -22,6 +23,7 @@ namespace XMLFeed
             Input = opts.Input;
             Extension = opts.Extension;
             Prefix = opts.Prefix;
+            MinPrice = opts.MinPrice;
             Output = opts.Output;
         }
 

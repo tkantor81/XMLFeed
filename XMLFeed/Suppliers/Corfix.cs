@@ -33,8 +33,7 @@ namespace XMLFeed.Suppliers
                 }
 
                 // add Prefix to CODE
-                XmlNode code = item.SelectSingleNode("CODE");
-                code.InnerXml = Prefix + code.InnerXml;
+                Transformation.PrependPrefixToCODE(item, Prefix);
 
                 // rename PRODUCT to NAME
                 XmlNode product = item.SelectSingleNode("PRODUCT");
@@ -170,11 +169,7 @@ namespace XMLFeed.Suppliers
                 }
 
                 // fill EAN if empty
-                XmlNode ean = item.SelectSingleNode("EAN");
-                if (ean.InnerXml == "")
-                {
-                    ean.InnerXml = "0";
-                }
+                Transformation.FillEmptyEAN(item);
             }
         }
     }

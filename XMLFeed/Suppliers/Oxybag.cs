@@ -16,6 +16,27 @@ namespace XMLFeed.Suppliers
             XmlNodeList items = doc.SelectNodes("/SHOP/SHOPITEM");
             foreach (XmlNode item in items)
             {
+                // rename DMOC_VC_DPH to PRICE_VAT and limit according Minimum transformed item price
+                XmlNode dmocVcDPH = item.SelectSingleNode("DMOC_VC_DPH");
+                if (dmocVcDPH != null)
+                {
+                    double prc = Double.Parse(dmocVcDPH.InnerXml);
+                    if (prc < MinPrice)
+                    {
+                        item.ParentNode.RemoveChild(item);
+                        continue;
+                    }
+
+                    XmlNode priceVat = doc.CreateElement("PRICE_VAT");
+                    priceVat.InnerXml = dmocVcDPH.InnerXml;
+                    item.ReplaceChild(priceVat, dmocVcDPH);
+                }
+                else
+                {
+                    item.ParentNode.RemoveChild(item);
+                    continue;
+                }
+
                 // rename ITEM_ID to CODE, add Prefix
                 XmlNode itemId = item.SelectSingleNode("ITEM_ID");
                 XmlElement code = doc.CreateElement("CODE");
@@ -71,7 +92,19 @@ namespace XMLFeed.Suppliers
                     categorytext.ParentNode.RemoveChild(categorytext);
                 }
                 item.AppendChild(cetegories);
-                
+
+                // rename PRICE_VAT to VAT
+                double dph = 0;
+                XmlNode priceVatt = item.SelectSingleNode("PRICE_VAT");
+                if (priceVatt != null)
+                {
+                    XmlElement vat = doc.CreateElement("VAT");
+                    vat.InnerXml = priceVatt.InnerXml;
+                    item.ReplaceChild(vat, priceVatt);
+                    dph = Double.Parse(vat.InnerXml);
+                }
+
+                double total = 0;
                 XmlNode price = item.SelectSingleNode("PRICE");
                 if (price != null && price.InnerText == "?")
                 {
@@ -80,28 +113,11 @@ namespace XMLFeed.Suppliers
                 }
                 else
                 {
-                    // rename PRICE to PURCHASE_PRICE
+                    // rename PRICE to PURCHASE_PRICE and add DPH
+                    total = Double.Parse(price.InnerXml) * (1 + (0.01 * dph));
                     XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
-                    purchasePrice.InnerXml = price.InnerXml;
+                    purchasePrice.InnerXml = total.ToString();
                     item.ReplaceChild(purchasePrice, price);
-                }
-
-                // rename PRICE_VAT to VAT
-                XmlNode priceVat = item.SelectSingleNode("PRICE_VAT");
-                if (priceVat != null)
-                {
-                    XmlElement vat = doc.CreateElement("VAT");
-                    vat.InnerXml = priceVat.InnerXml;
-                    item.ReplaceChild(vat, priceVat);
-                }
-
-                // rename DMOC_VC_DPH to PRICE_VAT
-                XmlNode dmocVcDPH = item.SelectSingleNode("DMOC_VC_DPH");
-                if (dmocVcDPH != null)
-                {
-                    priceVat = doc.CreateElement("PRICE_VAT");
-                    priceVat.InnerXml = dmocVcDPH.InnerXml;
-                    item.ReplaceChild(priceVat, dmocVcDPH);
                 }
 
                 // transform PARAMs to TEXT_PROPERTIES/TEXT_PROPERTY
@@ -125,11 +141,7 @@ namespace XMLFeed.Suppliers
                 }
 
                 // fill EAN if empty
-                XmlNode ean = item.SelectSingleNode("EAN");
-                if (ean.InnerXml == "")
-                {
-                    ean.InnerXml = "0";
-                }
+                Transformation.FillEmptyEAN(item);
             }
         }
     }
