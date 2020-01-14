@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text;
 using System.Xml;
 
@@ -20,8 +21,15 @@ namespace XMLFeed.Suppliers
                 XmlNode dmocVcDPH = item.SelectSingleNode("DMOC_VC_DPH");
                 if (dmocVcDPH != null)
                 {
-                    double prc = Double.Parse(dmocVcDPH.InnerXml);
-                    if (prc < MinPrice)
+                    if (Double.TryParse(dmocVcDPH.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double parsedPrice))
+                    {
+                        if (parsedPrice < MinPrice)
+                        {
+                            item.ParentNode.RemoveChild(item);
+                            continue;
+                        }
+                    }
+                    else
                     {
                         item.ParentNode.RemoveChild(item);
                         continue;
@@ -113,8 +121,12 @@ namespace XMLFeed.Suppliers
                 }
                 else
                 {
-                    // rename PRICE to PURCHASE_PRICE and add DPH
-                    total = Double.Parse(price.InnerXml) * (1 + (0.01 * dph));
+                    // rename PRICE to PURCHASE_PRICE and add VAT
+                    if (Double.TryParse(price.InnerXml, NumberStyles.Any, new CultureInfo("en-US"), out double parsedPrice))
+                    {
+                        total = Math.Round(parsedPrice * (1 + (0.01 * dph)), 0, MidpointRounding.AwayFromZero);
+                    }
+                        
                     XmlElement purchasePrice = doc.CreateElement("PURCHASE_PRICE");
                     purchasePrice.InnerXml = total.ToString();
                     item.ReplaceChild(purchasePrice, price);
